@@ -23,7 +23,7 @@
                 <v-card-text
                   >Breeding time: {{ token.capture_rate }}</v-card-text
                 >
-                <v-card-text>Price: {{ token.price }} WEI</v-card-text>
+                <v-card-text>Price: {{ token.price }} ETH</v-card-text>
               </div>
 
               <v-avatar class="ma-3" size="175" tile>

@@ -6,7 +6,7 @@
       >
 
       <v-card-text>
-        Please enter the price for your NFT (in WEI):
+        Please enter the price for your NFT (in Ether):
 
         <v-form ref="form" v-model="priceValid" lazy-validation>
           <v-text-field
@@ -51,7 +51,7 @@ export default {
     priceRules() {
       return [
         v => !!v || "price is required",
-        v => (v && v >= 100) || "You must input a price superior to 100WEI"
+        v => (v && v >= 0.001) || "You must input a price superior to 0.001 ETH"
       ];
     }
   },

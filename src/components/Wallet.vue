@@ -111,7 +111,7 @@ export default {
       this.dialogSell = true;
     },
     sellValidated(price) {
-      this.$store.dispatch("wallet/sellToken", {
+      this.$store.dispatch("wallet/listToken", {
         tokenId: this.selectedToken,
         price: price
       });
