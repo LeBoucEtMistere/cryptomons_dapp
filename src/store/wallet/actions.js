@@ -74,8 +74,7 @@ export default {
   },
   async listToken({ rootState }, payload) {
     const web3 = rootState.w3.instance();
-    const BN = web3.utils.BN;
-    const price = web3.utils.toWei(new BN(payload.price), "ether");
+    const price = web3.utils.toWei(payload.price, "ether");
     try {
       await rootState.CMContract.methods
         .approve(rootState.MKContract._address, payload.tokenId)
