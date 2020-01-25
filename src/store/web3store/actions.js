@@ -82,7 +82,7 @@ export default {
         if (address !== state.address) {
           console.log("address changed");
           dispatch("setAddress", address).then(() => {
-            dispatch("market/getWallet", {}, { root: true });
+            dispatch("wallet/getWallet", {}, { root: true });
             dispatch("checkAdmin", {}, { root: true });
           });
         }
