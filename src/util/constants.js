@@ -9,7 +9,7 @@ export const constants = {
     "5777": "Ganache Blockchain"
   },
   addresses: {
-    CryptomonContract: "0x34157D17C2a8f6dBFf68c6Bc50187dD56B8413D5",
-    MarketContract: "0x3bE433C6c1Aa2317e77c1694C856B2380d4539Dc"
+    CryptomonContract: "0xB75BD31D13FdFd59A1B16eE2062C196ec6db2dA0",
+    MarketContract: "0xdF12D74863C7920aFacD8EA6dE9ead5Fd84db708"
   }
 };
