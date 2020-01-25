@@ -12,8 +12,8 @@ import registerWalletStore from "./wallet";
 import registerMarketStore from "./market";
 
 import { constants } from "./../util/constants";
-const CMabi = require("./../../../build/contracts/Cryptomon.json");
-const MKabi = require("./../../../build/contracts/Market.json");
+const CMabi = require("./../abi//Cryptomon.json");
+const MKabi = require("./../abi/Market.json");
 
 Vue.use(Vuex);
 
