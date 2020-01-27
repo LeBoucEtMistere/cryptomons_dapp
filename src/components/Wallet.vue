@@ -44,13 +44,19 @@
 
             <v-card-actions>
               <v-btn
+                v-if="!token.isListed"
                 @click="sell(token.tokenId)"
                 color="rgba(100,115,201)"
                 text
-                :disabled="token.isListed"
-                ><div v-if="!token.isListed">Sell</div>
-                <div v-else>Listed</div></v-btn
-              >
+                ><div>Sell</div>
+              </v-btn>
+              <v-btn
+                v-else
+                @click="unlistToken(token.tokenId)"
+                color="rgba(100,115,201)"
+                text
+                ><div>Reclaim</div>
+              </v-btn>
               <v-btn
                 @click="transfer(token.tokenId)"
                 color="rgba(100,115,201)"
@@ -116,6 +122,9 @@ export default {
         price: price
       });
       this.selectedToken = null;
+    },
+    unlistToken(tokenId) {
+      this.$store.dispatch("wallet/unlistToken", { tokenId: tokenId });
     },
     transfer(tokenId) {
       this.selectedToken = tokenId;

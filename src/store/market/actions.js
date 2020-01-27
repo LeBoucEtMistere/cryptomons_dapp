@@ -74,7 +74,26 @@ export default {
       if (error) {
         console.log(error);
       }
-      dispatch("wallet/getWallet", {}, { root: true });
+      const web3 = rootState.w3.instance();
+      if (
+        _event.returnValues._by ==
+        web3.utils.toChecksumAddress(rootState.w3.address)
+      ) {
+        dispatch("wallet/getWallet", {}, { root: true });
+      }
+      dispatch("fetchMarketData");
+    });
+    rootState.MKContract.events.Unlisted(function(error, _event) {
+      if (error) {
+        console.log(error);
+      }
+      const web3 = rootState.w3.instance();
+      if (
+        _event.returnValues._by ==
+        web3.utils.toChecksumAddress(rootState.w3.address)
+      ) {
+        dispatch("wallet/getWallet", {}, { root: true });
+      }
       dispatch("fetchMarketData");
     });
   }

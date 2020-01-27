@@ -88,5 +88,15 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+  async unlistToken({ rootState }, payload) {
+    try {
+      await rootState.MKContract.methods.unlistToken(payload.tokenId).send({
+        from: rootState.w3.address,
+        gasLimit: 1000000
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
