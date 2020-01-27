@@ -22,15 +22,26 @@ export default {
           // handle success
           const pokedex_number = parseInt(uri.split("/").pop(), 10);
           const web3 = rootState.w3.instance();
+          // get cryptomon price
           const BN = web3.utils.BN;
-          var priceWei = await rootState.MKContract.methods
+          const priceWei = await rootState.MKContract.methods
             .getTokenPrice(tokenId)
             .call({ from: rootState.w3.address });
           const priceEth = web3.utils.fromWei(new BN(priceWei), "ether");
+          // get estimated fees
+          const estimatedBuyGas = await rootState.MKContract.methods
+            .buyToken(tokenId)
+            .estimateGas({ value: priceWei, from: rootState.w3.address });
+          const estimatedBuyFees =
+            estimatedBuyGas * (await web3.eth.getGasPrice());
+          const feesEth = web3.utils.fromWei(new BN(estimatedBuyFees), "ether");
+          // construct object
           const obj = {
             ...response.data,
-            price: priceEth,
+            price: parseFloat(priceEth, 10),
             priceWei: priceWei,
+            estimatedFeesWei: estimatedBuyFees,
+            estimatedFees: parseFloat(feesEth, 10),
             image_url: `https://morning-springs-53559.herokuapp.com/cryptomon/images/${pokedex_number}.png`,
             pokedex_number: pokedex_number,
             tokenId: parseInt(tokenId, 10)

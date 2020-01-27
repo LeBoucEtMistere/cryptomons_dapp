@@ -23,7 +23,14 @@
                 <v-card-text
                   >Breeding time: {{ token.capture_rate }}</v-card-text
                 >
-                <v-card-text>Price: {{ token.price }} ETH</v-card-text>
+                <v-card-text
+                  v-if="token.estimatedFees + token.price < balance"
+                  class="green--text"
+                  >Price: {{ token.price }} ETH</v-card-text
+                >
+                <v-card-text v-else class="red--text"
+                  >Price: {{ token.price }} ETH</v-card-text
+                >
               </div>
 
               <v-avatar class="ma-3" size="175" tile>
@@ -58,6 +65,9 @@ export default {
     selectedToken: null
   }),
   computed: {
+    balance() {
+      return this.$store.getters["w3/balance"];
+    },
     market() {
       return this.$store.getters["market/getListedTokens"];
     },
