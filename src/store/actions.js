@@ -16,6 +16,7 @@ export default {
     commit("registerMKContractMut", instance);
   },
   checkAdmin({ commit, state }) {
+    commit("setLoading", true);
     if (state.CMContract && state.w3.address) {
       const CMC = state.CMContract;
       CMC.methods
@@ -23,6 +24,7 @@ export default {
         .call({ from: state.w3.address })
         .then(isOwner => {
           commit("isAdmin", isOwner);
+          commit("setLoading", false);
         });
     }
   }

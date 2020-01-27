@@ -12,29 +12,32 @@
       @validated="sellValidated"
       :selectedToken="selectedToken"
     />
-    <div v-if="walletEmpty">No Cryptomon in your wallet</div>
+    <div v-if="walletEmpty && !isLoading">
+      No Cryptomon in your wallet
+    </div>
     <v-container v-else fluid>
-      <v-row dense>
+      <v-row>
         <v-col v-for="token in walletSorted" :key="token.tokenId" :cols="3">
-          <v-card>
+          <v-card shaped>
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
-                <v-card-title
-                  class="headline"
-                  v-text="token.name"
-                ></v-card-title>
+                <v-card-title class="headline">{{ token.name }} </v-card-title>
 
                 <v-card-subtitle>
                   Pokemon n°{{ token.pokedex_number }} - NFT
                   {{ token.tokenId }}
                 </v-card-subtitle>
-                <v-card-text>
-                  ATK: {{ token.atk }} DEF: {{ token.def }} HP:
-                  {{ token.hp }}
-                </v-card-text>
-                <v-card-text
-                  >Breeding time: {{ token.capture_rate }}</v-card-text
-                >
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>ATK: {{ token.atk }}</v-list-item-title>
+                    <v-list-item-title>DEF: {{ token.def }}</v-list-item-title>
+                    <v-list-item-title>HP: {{ token.hp }}</v-list-item-title>
+                    <v-list-item-title
+                      >Breeding time:
+                      {{ token.capture_rate }}</v-list-item-title
+                    >
+                  </v-list-item-content>
+                </v-list-item>
               </div>
 
               <v-avatar class="ma-3" size="175" tile>
@@ -47,6 +50,7 @@
                 v-if="!token.isListed"
                 @click="sell(token.tokenId)"
                 color="rgba(100,115,201)"
+                :disabled="isLoading"
                 text
                 ><div>Sell</div>
               </v-btn>
@@ -54,6 +58,7 @@
                 v-else
                 @click="unlistToken(token.tokenId)"
                 color="rgba(100,115,201)"
+                :disabled="isLoading"
                 text
                 ><div>Reclaim</div>
               </v-btn>
@@ -61,21 +66,29 @@
                 @click="transfer(token.tokenId)"
                 color="rgba(100,115,201)"
                 text
-                :disabled="token.isListed"
+                :disabled="token.isListed || isLoading"
                 >Transfer</v-btn
               >
               <v-btn
                 @click="breed(token.tokenId)"
                 color="rgba(100,115,201)"
                 text
-                :disabled="token.isListed"
+                :disabled="token.isListed || isLoading"
                 >Breed</v-btn
               >
               <v-spacer></v-spacer>
-
-              <v-btn icon>
+              <v-chip
+                v-if="token.isListed"
+                class="ma-2"
+                small
+                color="green"
+                text-color="white"
+              >
+                On Sell
+              </v-chip>
+              <!-- <v-btn icon>
                 <v-icon>mdi-heart</v-icon>
-              </v-btn>
+              </v-btn> -->
             </v-card-actions>
           </v-card>
         </v-col>
@@ -109,6 +122,9 @@ export default {
     },
     walletEmpty() {
       return this.wallet.length === 0;
+    },
+    isLoading() {
+      return this.$store.getters["isLoading"];
     }
   },
   methods: {

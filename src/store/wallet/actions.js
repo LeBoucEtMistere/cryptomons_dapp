@@ -4,6 +4,7 @@ import axios from "axios";
 
 export default {
   async getWallet({ commit, state, rootState }) {
+    commit("setLoading", true, { root: true });
     console.log("getWallet Action being executed");
     const CMC = rootState.CMContract;
     const builded_wallet = [];
@@ -59,20 +60,24 @@ export default {
       });
     });
     commit("setWallet", builded_wallet);
+    commit("setLoading", false, { root: true });
   },
-  async transferToken({ dispatch, rootState }, payload) {
+  async transferToken({ dispatch, rootState, commit }, payload) {
     console.log(payload);
+    commit("setLoading", true, { root: true });
     const web3 = rootState.w3.instance();
     if (web3.utils.isAddress(payload.to)) {
       await rootState.CMContract.methods
         .safeTransferFrom(rootState.w3.address, payload.to, payload.tokenId)
         .send({ from: rootState.w3.address });
       dispatch("getWallet");
+      commit("setLoading", false, { root: true });
     } else {
       console.log("Trying to transfer to invalid ETh address");
     }
   },
-  async listToken({ rootState }, payload) {
+  async listToken({ rootState, commit }, payload) {
+    commit("setLoading", true, { root: true });
     const web3 = rootState.w3.instance();
     const price = web3.utils.toWei(payload.price, "ether");
     try {
@@ -88,8 +93,10 @@ export default {
     } catch (error) {
       console.log(error);
     }
+    commit("setLoading", false, { root: true });
   },
-  async unlistToken({ rootState }, payload) {
+  async unlistToken({ rootState, commit }, payload) {
+    commit("setLoading", true, { root: true });
     try {
       await rootState.MKContract.methods.unlistToken(payload.tokenId).send({
         from: rootState.w3.address,
@@ -98,5 +105,6 @@ export default {
     } catch (error) {
       console.log(error);
     }
+    commit("setLoading", false, { root: true });
   }
 };

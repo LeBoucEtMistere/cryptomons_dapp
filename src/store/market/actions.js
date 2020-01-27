@@ -4,6 +4,7 @@ import axios from "axios";
 
 export default {
   async fetchMarketData({ commit, rootState }) {
+    commit("setLoading", true, { root: true });
     var listedTokenIds = await rootState.MKContract.methods
       .getListedTokens()
       .call({ from: rootState.w3.address });
@@ -52,13 +53,16 @@ export default {
     });
     const listedTokens = await Promise.all(promises);
     commit("setMarketData", listedTokens);
+    commit("setLoading", false, { root: true });
   },
 
-  async buyToken({ rootState, state }, tokenId) {
+  async buyToken({ rootState, state, commit }, tokenId) {
+    commit("setLoading", true, { root: true });
     const price = state.listedTokens.find(token => token.tokenId === tokenId)
       .priceWei;
     const options = { value: price, from: rootState.w3.address };
     await rootState.MKContract.methods.buyToken(tokenId).send(options);
+    commit("setLoading", false, { root: true });
   },
 
   async registerEventCallbacks({ dispatch, rootState }) {

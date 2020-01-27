@@ -1,6 +1,7 @@
 let state = {
   CMContract: null,
   MKContract: null,
-  isAdmin: false
+  isAdmin: false,
+  isLoading: false
 };
 export default state;

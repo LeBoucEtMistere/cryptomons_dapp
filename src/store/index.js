@@ -24,7 +24,7 @@ const store = new Vuex.Store({
   mutations,
   actions
 });
-
+store.commit("setLoading", true);
 registerWeb3Store(store, "w3");
 registerMarketStore(store, "market");
 registerWalletStore(store, "wallet");
@@ -43,6 +43,7 @@ store.dispatch("w3/initWeb3").then(() =>
     .then(() => store.dispatch("market/registerEventCallbacks"))
     .then(() => store.dispatch("wallet/getWallet"))
     .then(() => store.dispatch("market/fetchMarketData"))
+    .then(() => store.commit("setLoading", false))
 );
 
 export default store;

@@ -8,8 +8,14 @@
       <v-card-text>
         Please enter the price for your NFT (in Ether):
 
-        <v-form ref="form" v-model="priceValid" lazy-validation>
+        <v-form
+          @submit.prevent="validate"
+          ref="form"
+          v-model="priceValid"
+          lazy-validation
+        >
           <v-text-field
+            autofocus
             v-model="price"
             :rules="priceRules"
             label="Price"

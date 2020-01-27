@@ -20,14 +20,6 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
-
       <template v-slot:extension>
         <v-tabs align-with-title background-color="transparent">
           <v-tab to="/wallet">My Cryptomons</v-tab>
@@ -36,7 +28,13 @@
         </v-tabs>
       </template>
     </v-app-bar>
+
     <v-content>
+      <v-progress-linear
+        v-if="isLoading"
+        indeterminate
+        color="rgba(100,115,201)"
+      ></v-progress-linear>
       <router-view />
     </v-content>
 
@@ -62,6 +60,9 @@ export default {
     },
     isAdmin() {
       return this.$store.getters.isAdmin;
+    },
+    isLoading() {
+      return this.$store.getters["isLoading"];
     }
   }
 };

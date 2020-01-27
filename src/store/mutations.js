@@ -10,5 +10,8 @@ export default {
   registerMKContractMut(state, payload) {
     console.log("MKContract registered properly");
     state.MKContract = payload;
+  },
+  setLoading(state, payload) {
+    state.isLoading = payload;
   }
 };

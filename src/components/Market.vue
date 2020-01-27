@@ -2,9 +2,9 @@
   <v-container>
     <div v-if="marketEmpty">No Cryptomon listed in the market</div>
     <v-container v-else fluid>
-      <v-row dense>
+      <v-row>
         <v-col v-for="token in marketSorted" :key="token.tokenId" :cols="3">
-          <v-card>
+          <v-card shaped>
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
                 <v-card-title
@@ -16,21 +16,32 @@
                   Pokemon n°{{ token.pokedex_number }} - NFT
                   {{ token.tokenId }}
                 </v-card-subtitle>
-                <v-card-text>
-                  ATK: {{ token.atk }} DEF: {{ token.def }} HP:
-                  {{ token.hp }}
-                </v-card-text>
-                <v-card-text
-                  >Breeding time: {{ token.capture_rate }}</v-card-text
-                >
-                <v-card-text
-                  v-if="token.estimatedFees + token.price < balance"
-                  class="green--text"
-                  >Price: {{ token.price }} ETH</v-card-text
-                >
-                <v-card-text v-else class="red--text"
-                  >Price: {{ token.price }} ETH</v-card-text
-                >
+
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      v-if="token.estimatedFees + token.price < balance"
+                      class="green--text"
+                      >Price: {{ token.price }} ETH</v-list-item-title
+                    >
+                    <v-list-item-title v-else class="red--text"
+                      >Price: {{ token.price }} ETH</v-list-item-title
+                    >
+                    <v-list-item-subtitle
+                      >ATK: {{ token.atk }}</v-list-item-subtitle
+                    >
+                    <v-list-item-subtitle
+                      >DEF: {{ token.def }}</v-list-item-subtitle
+                    >
+                    <v-list-item-subtitle
+                      >HP: {{ token.hp }}</v-list-item-subtitle
+                    >
+                    <v-list-item-subtitle
+                      >Breeding time:
+                      {{ token.capture_rate }}</v-list-item-subtitle
+                    >
+                  </v-list-item-content>
+                </v-list-item>
               </div>
 
               <v-avatar class="ma-3" size="175" tile>
@@ -43,14 +54,14 @@
                 @click="buy(token.tokenId)"
                 color="rgba(100,115,201)"
                 text
-                :disabled="token.isListed"
+                :disabled="$store.getters['isLoading']"
                 ><div>Buy</div>
               </v-btn>
               <v-spacer></v-spacer>
 
-              <v-btn icon>
+              <!-- <v-btn icon>
                 <v-icon>mdi-heart</v-icon>
-              </v-btn>
+              </v-btn> -->
             </v-card-actions>
           </v-card>
         </v-col>
