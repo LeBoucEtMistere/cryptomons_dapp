@@ -8,18 +8,19 @@ export default {
         console.log(error);
       }
       console.log(_event);
-      dispatch("getBreedingTokens");
     });
 
     rootState.CMContract.events.Hatched(function(error, _event) {
       if (error) {
         console.log(error);
       }
+      console.log(_event);
     });
     rootState.CMContract.events.Interrupted(function(error, _event) {
       if (error) {
         console.log(error);
       }
+      console.log(_event);
     });
   },
   async getBreedingTokens({ commit, rootState }) {
@@ -47,11 +48,13 @@ export default {
   },
 
   async hatch({ rootState, dispatch, commit }, cms) {
+    commit("setLoading", true, { root: true });
     const options = { from: rootState.w3.address };
     await rootState.CMContract.methods.hatch(cms[0], cms[1]).send(options);
     dispatch("wallet/getWallet", {}, { root: true });
     commit("hatched", []);
     commit("setBreedingTokens", []);
+    commit("setLoading", false, { root: true });
   },
   async hasHatched({ dispatch, rootState, commit }, cms) {
     setTimeout(async () => {

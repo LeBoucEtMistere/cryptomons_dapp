@@ -56,25 +56,21 @@ export default {
     commit("setLoading", false, { root: true });
   },
 
-  async buyToken({ rootState, state, commit }, tokenId) {
+  async buyToken({ rootState, state, commit, dispatch }, tokenId) {
     commit("setLoading", true, { root: true });
     const price = state.listedTokens.find(token => token.tokenId === tokenId)
       .priceWei;
     const options = { value: price, from: rootState.w3.address };
     await rootState.MKContract.methods.buyToken(tokenId).send(options);
+    dispatch("wallet/getWallet", {}, { root: true });
     commit("setLoading", false, { root: true });
   },
 
   async registerEventCallbacks({ dispatch, rootState }) {
-    rootState.MKContract.events.Sold(function(error, _event) {
-      if (error) {
-        console.log(error);
-      }
-      dispatch("wallet/getWallet", {}, { root: true });
-      dispatch("fetchMarketData");
-    });
-
-    rootState.MKContract.events.Listed(function(error, _event) {
+    rootState.MKContract.events.Sold({ fromBlock: "latest" }, function(
+      error,
+      _event
+    ) {
       if (error) {
         console.log(error);
       }
@@ -87,10 +83,32 @@ export default {
       }
       dispatch("fetchMarketData");
     });
-    rootState.MKContract.events.Unlisted(function(error, _event) {
+
+    rootState.MKContract.events.Listed({ fromBlock: "latest" }, function(
+      error,
+      _event
+    ) {
       if (error) {
         console.log(error);
       }
+      const web3 = rootState.w3.instance();
+      if (
+        _event.returnValues._by ==
+        web3.utils.toChecksumAddress(rootState.w3.address)
+      ) {
+        dispatch("wallet/getWallet", {}, { root: true });
+      }
+      dispatch("fetchMarketData");
+    });
+    rootState.MKContract.events.Unlisted({ fromBlock: "latest" }, function(
+      error,
+      _event
+    ) {
+      console.log("blablablabla");
+      if (error) {
+        console.log(error);
+      }
+      console.log(_event);
       const web3 = rootState.w3.instance();
       if (
         _event.returnValues._by ==

@@ -15,7 +15,6 @@ export default {
           .then(async () => {
             window.web3 = window.ethereum;
             const w3 = new Web3(window.web3);
-            console.log(window.web3);
             const isInject = await w3.eth.net.isListening();
             commit("setInjected", isInject);
             commit("setInstance", () => w3);
@@ -97,7 +96,7 @@ export default {
     }
   },
 
-  async initWeb3({ dispatch, commit }) {
+  async initWeb3({ dispatch, commit, state }) {
     await dispatch("connectToWeb3");
     await dispatch("getBlockchainNetwork");
     try {
@@ -110,7 +109,7 @@ export default {
     } catch (err) {
       console.log("get balance error:", err);
     }
-
+    state.instance().eth.defaultAccount = state.address;
     dispatch("monitorWeb3");
   }
 };
