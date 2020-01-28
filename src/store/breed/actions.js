@@ -22,7 +22,7 @@ export default {
       }
     });
   },
-  async getBreedingTokens({ dispatch, commit, rootState }) {
+  async getBreedingTokens({ commit, rootState }) {
     commit("setLoading", true, { root: true });
 
     const options = { from: rootState.w3.address };
