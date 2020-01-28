@@ -13,7 +13,7 @@ import registerMarketStore from "./market";
 import registerBreedingStore from "./breed";
 
 import { constants } from "./../util/constants";
-const CMabi = require("./../abi//Cryptomon.json");
+const CMabi = require("./../abi/Cryptomon.json");
 const MKabi = require("./../abi/Market.json");
 
 Vue.use(Vuex);
