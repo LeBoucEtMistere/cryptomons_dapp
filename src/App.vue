@@ -30,11 +30,23 @@
     </v-app-bar>
 
     <v-content>
-      <v-progress-linear
+      <v-dialog v-model="isLoading" overlay persistent width="350">
+        <v-card color="deep-purple" dark>
+          <v-card-text>
+            Please wait for validation of the transaction...
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <!-- <v-progress-linear
         v-if="isLoading"
         indeterminate
         color="rgba(100,115,201)"
-      ></v-progress-linear>
+      ></v-progress-linear> -->
       <router-view />
     </v-content>
 

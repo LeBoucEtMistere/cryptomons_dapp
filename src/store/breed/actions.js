@@ -50,11 +50,23 @@ export default {
   async hatch({ rootState, dispatch, commit }, cms) {
     commit("setLoading", true, { root: true });
     const options = { from: rootState.w3.address };
-    await rootState.CMContract.methods.hatch(cms[0], cms[1]).send(options);
-    dispatch("wallet/getWallet", {}, { root: true });
+    const tx = await rootState.CMContract.methods
+      .hatch(cms[0], cms[1])
+      .send(options);
+    console.log(tx);
+    console.log(tx.events);
+    console.log(tx.events.Transfer);
+    console.log(tx.events[0]);
+    console.log(tx.events[1]);
+    console.log(tx.events.Transfer.returnValues);
+    await dispatch("wallet/getWallet", {}, { root: true });
     commit("hatched", []);
     commit("setBreedingTokens", []);
     commit("setLoading", false, { root: true });
+    commit("parent1", cms[0]);
+    commit("parent2", cms[1]);
+    commit("child", parseInt(tx.events.Transfer.returnValues.tokenId, 10));
+    commit("showHatchDialog", true);
   },
   async hasHatched({ dispatch, rootState, commit }, cms) {
     setTimeout(async () => {
@@ -69,5 +81,11 @@ export default {
         commit("hatched", cms);
       }
     }, 1000);
+  },
+  async resetHatchDialog({ commit }) {
+    commit("parent1", null);
+    commit("parent2", null);
+    commit("child", null);
+    commit("showHatchDialog", false);
   }
 };

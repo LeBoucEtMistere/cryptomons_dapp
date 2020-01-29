@@ -12,6 +12,14 @@
       @validated="sellValidated"
       :selectedToken="selectedToken"
     />
+    <HatchedDialog
+      v-if="hatchDialog"
+      @close="$store.dispatch('breed/resetHatchDialog')"
+      :parent1="parent1"
+      :parent2="parent2"
+      :child="child"
+    >
+    </HatchedDialog>
     <div v-if="walletEmpty && !isLoading">
       No Cryptomon in your wallet
     </div>
@@ -169,13 +177,17 @@
 </template>
 
 <script>
+/* eslint-disable no-console */
+
 import DialogTransfer from "./DialogTransfer";
 import DialogSell from "./DialogSell";
+import HatchedDialog from "./HatchedDialog";
 
 export default {
   components: {
     DialogTransfer,
-    DialogSell
+    DialogSell,
+    HatchedDialog
   },
   data: () => ({
     dialogTransfer: false,
@@ -217,6 +229,25 @@ export default {
       } else {
         return [];
       }
+    },
+    parent1() {
+      const id = this.$store.getters["breed/getParent1"];
+      return this.wallet.filter(token => token.tokenId === id)[0];
+    },
+    parent2() {
+      const id = this.$store.getters["breed/getParent2"];
+      return this.wallet.filter(token => token.tokenId === id)[0];
+    },
+    child() {
+      const id = this.$store.getters["breed/getChild"];
+      console.log("childi d", id);
+      console.log(this.wallet.filter(token => token.tokenId === id));
+      return this.wallet.filter(token => token.tokenId === id)[0];
+    },
+    hatchDialog() {
+      return (
+        this.$store.getters["breed/showHatchDialog"] && this.child !== undefined
+      );
     }
   },
   methods: {
