@@ -79,16 +79,34 @@ export default {
     const breedingTokens = (
       await rootState.CMContract.methods.getBreedingTokens().call(options)
     ).map(token => parseInt(token, 10));
+    const promises = [];
+    breedingTokens.forEach(token => {
+      promises.push(
+        new Promise(async resolve => {
+          const p = await rootState.CMContract.methods
+            .hasHatched(token)
+            .call(options);
+          resolve({ tokenId: token, hatched: p });
+        })
+      );
+    });
 
-    commit("setBreedingTokens", breedingTokens);
+    const r = await Promise.all(promises);
+    const final = breedingTokens.filter(token =>
+      r.some(e => e.tokenId === token && !e.hatched)
+    );
+    commit("setBreedingTokens", final);
     //commit("setLoading", false, { root: true });
   },
 
-  async fight({ rootState }, args) {
+  async fight({ rootState, commit }, args) {
+    commit("setFighted", false);
     const options = { from: rootState.w3.address };
     const result = await rootState.CMContract.methods
       .fight(args.attacker, args.defender)
       .send(options);
+    commit("setLastFight", result.events.Fighted.returnValues.win);
+    commit("setFighted", true);
     console.log(result);
   }
 };

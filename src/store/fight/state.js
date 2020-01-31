@@ -1,4 +1,6 @@
 export default {
   tokens: [],
-  breedingTokens: []
+  breedingTokens: [],
+  lastFight: false,
+  fighted: false
 };

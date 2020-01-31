@@ -4,5 +4,11 @@ export default {
   },
   setBreedingTokens(state, payload) {
     state.breedingTokens = payload;
+  },
+  setLastFight(state, payload) {
+    state.lastFight = payload;
+  },
+  setFighted(state, payload) {
+    state.fighted = payload;
   }
 };
