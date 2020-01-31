@@ -24,6 +24,7 @@
         <v-tabs align-with-title background-color="transparent">
           <v-tab to="/wallet">My Cryptomons</v-tab>
           <v-tab to="/market">Marketplace</v-tab>
+          <v-tab to="/fightclub">Fight Club</v-tab>
           <v-tab v-if="isAdmin" to="/admin">Admin</v-tab>
         </v-tabs>
       </template>

@@ -4,12 +4,18 @@ import axios from "axios";
 
 export default {
   async fetchMarketData({ commit, rootState }) {
-    commit("setLoading", true, { root: true });
+    console.log("fetchMarketData action");
+    //commit("setLoading", true, { root: true });
+    const web3 = rootState.w3.instance();
+
     var listedTokenIds = await rootState.MKContract.methods
       .getListedTokens()
       .call({ from: rootState.w3.address });
 
     listedTokenIds = listedTokenIds.filter(token => token != 0);
+
+    const BN = web3.utils.BN;
+    const gasPrice = new BN(await web3.eth.getGasPrice());
 
     const promises = [];
     listedTokenIds.forEach(tokenId => {
@@ -18,13 +24,18 @@ export default {
           const uri = await rootState.CMContract.methods
             .tokenURI(tokenId)
             .call({ from: rootState.w3.address });
-          const response = await axios.get(uri);
+          const response = await axios.get(
+            uri[0] === "h"
+              ? uri
+              : "https://morning-springs-53559.herokuapp.com/cryptomon/meta/" +
+                  uri
+          );
 
           // handle success
           const pokedex_number = parseInt(uri.split("/").pop(), 10);
-          const web3 = rootState.w3.instance();
+
           // get cryptomon price
-          const BN = web3.utils.BN;
+
           const priceWei = await rootState.MKContract.methods
             .getTokenPrice(tokenId)
             .call({ from: rootState.w3.address });
@@ -33,9 +44,8 @@ export default {
           const estimatedBuyGas = await rootState.MKContract.methods
             .buyToken(tokenId)
             .estimateGas({ value: priceWei, from: rootState.w3.address });
-          const estimatedBuyFees =
-            estimatedBuyGas * (await web3.eth.getGasPrice());
-          const feesEth = web3.utils.fromWei(new BN(estimatedBuyFees), "ether");
+          const estimatedBuyFees = new BN(estimatedBuyGas).mul(gasPrice);
+          const feesEth = web3.utils.fromWei(estimatedBuyFees, "ether");
           // construct object
           const obj = {
             ...response.data,
@@ -53,7 +63,8 @@ export default {
     });
     const listedTokens = await Promise.all(promises);
     commit("setMarketData", listedTokens);
-    commit("setLoading", false, { root: true });
+    //commit("setLoading", false, { root: true });
+    console.log("end fetchMarketData action");
   },
 
   async buyToken({ rootState, state, commit, dispatch }, tokenId) {

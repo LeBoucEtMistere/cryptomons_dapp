@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Market from "../components/Market.vue";
 import Wallet from "../components/Wallet.vue";
 import Admin from "../components/Admin.vue";
+import FightClub from "../components/FightClub.vue";
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,11 @@ const routes = [
     path: "/admin",
     name: "admin",
     component: Admin
+  },
+  {
+    path: "/fightclub",
+    name: "fightclub",
+    component: FightClub
   }
 ];
 

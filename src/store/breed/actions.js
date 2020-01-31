@@ -24,20 +24,26 @@ export default {
     });
   },
   async getBreedingTokens({ commit, rootState }) {
-    commit("setLoading", true, { root: true });
+    //commit("setLoading", true, { root: true });
 
     const options = { from: rootState.w3.address };
-    const tokens = await rootState.CMContract.methods
-      .getBreedingTokens()
-      .call(options);
+    const tokens = (
+      await rootState.CMContract.methods.getBreedingTokens().call(options)
+    ).map(token => parseInt(token, 10));
+    const myTokens = rootState.wallet.wallet.map(token => token.tokenId);
+
+    const filtered = tokens.filter(token => {
+      return myTokens.includes(token);
+    });
     commit(
       "setBreedingTokens",
-      tokens.map(token => parseInt(token, 10))
+      filtered.map(token => parseInt(token, 10))
     );
-    commit("setLoading", false, { root: true });
+    //commit("setLoading", false, { root: true });
   },
 
   async breed({ commit, dispatch, rootState }, cms) {
+    console.log("breed action");
     commit("setLoading", true, { root: true });
 
     const options = { from: rootState.w3.address };
@@ -48,6 +54,7 @@ export default {
   },
 
   async hatch({ rootState, dispatch, commit }, cms) {
+    console.log("hatch action");
     commit("setLoading", true, { root: true });
     const options = { from: rootState.w3.address };
     const tx = await rootState.CMContract.methods

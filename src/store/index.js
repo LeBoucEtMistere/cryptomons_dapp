@@ -11,6 +11,7 @@ import registerWeb3Store from "./web3store";
 import registerWalletStore from "./wallet";
 import registerMarketStore from "./market";
 import registerBreedingStore from "./breed";
+import registerFightStore from "./fight";
 
 import { constants } from "./../util/constants";
 const CMabi = require("./../abi/Cryptomon.json");
@@ -30,6 +31,7 @@ registerWeb3Store(store, "w3");
 registerMarketStore(store, "market");
 registerWalletStore(store, "wallet");
 registerBreedingStore(store, "breed");
+registerFightStore(store, "fight");
 store.dispatch("w3/initWeb3").then(() =>
   store
     .dispatch("registerCMContract", {
@@ -45,18 +47,19 @@ store.dispatch("w3/initWeb3").then(() =>
     .then(() => store.dispatch("market/registerEventCallbacks"))
     .then(() => store.dispatch("breed/registerEventCallbacks"))
     .then(() => store.dispatch("wallet/getWallet"))
-    .then(() => store.dispatch("market/fetchMarketData"))
-    .then(() => store.dispatch("breed/getBreedingTokens"))
     .then(() => {
-      if (store.getters["breed/getBreedingTokens"].length > 0) {
-        console.log("ahahhaha");
-        store.dispatch(
-          "breed/hasHatched",
-          store.getters["breed/getBreedingTokens"]
-        );
-      }
+      store.commit("setLoading", false);
+      store.dispatch("market/fetchMarketData");
+      store.dispatch("fight/getTokens");
+      store.dispatch("breed/getBreedingTokens").then(() => {
+        if (store.getters["breed/getBreedingTokens"].length > 0) {
+          store.dispatch(
+            "breed/hasHatched",
+            store.getters["breed/getBreedingTokens"]
+          );
+        }
+      });
     })
-    .then(() => store.commit("setLoading", false))
 );
 
 export default store;

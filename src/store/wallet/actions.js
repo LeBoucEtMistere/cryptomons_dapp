@@ -5,10 +5,8 @@ import axios from "axios";
 export default {
   async getWallet({ commit, state, rootState }) {
     commit("setLoading", true, { root: true });
-    console.log("getWallet Action being executed");
     const CMC = rootState.CMContract;
     const builded_wallet = [];
-
     const balance = await CMC.methods
       .balanceOf(rootState.w3.address)
       .call({ from: rootState.w3.address });
@@ -32,7 +30,12 @@ export default {
           const uri = await CMC.methods
             .tokenURI(tokenId)
             .call({ from: rootState.w3.address });
-          const response = await axios.get(uri);
+          const response = await axios.get(
+            uri[0] === "h"
+              ? uri
+              : "https://morning-springs-53559.herokuapp.com/cryptomon/meta/" +
+                  uri
+          );
 
           // handle success
           const pokedex_number = parseInt(uri.split("/").pop(), 10);
