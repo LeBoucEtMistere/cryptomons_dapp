@@ -46,7 +46,7 @@ store.dispatch("w3/initWeb3").then(() =>
     )
     .then(() => store.dispatch("market/registerEventCallbacks"))
     .then(() => store.dispatch("breed/registerEventCallbacks"))
-    .then(() => store.dispatch("wallet/getWallet"))
+    .then(() => store.dispatch("wallet/initWallet"))
     .then(() => {
       store.commit("setLoading", false);
       store.dispatch("market/fetchMarketData");

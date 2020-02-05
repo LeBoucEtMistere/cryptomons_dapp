@@ -1,6 +1,7 @@
 let state = {
   wallet: [],
-  tokenIds: [],
-  balance: null
+  listedTokenIds: [],
+  tokenIds: new Set(),
+  loadingTokenIds: []
 };
 export default state;

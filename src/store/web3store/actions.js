@@ -80,10 +80,11 @@ export default {
         const address = await dispatch("getCoinbase");
         if (address !== state.address) {
           console.log("address changed");
-          dispatch("setAddress", address).then(() => {
-            dispatch("wallet/getWallet", {}, { root: true });
-            dispatch("checkAdmin", {}, { root: true });
-          });
+          dispatch("setLoading", true, { root: true });
+          await dispatch("setAddress", address);
+          await dispatch("checkAdmin", {}, { root: true });
+          await dispatch("wallet/initWallet", {}, { root: true });
+          dispatch("setLoading", false, { root: true });
         }
       } catch (err) {
         console.log("get coinbase error:", err);

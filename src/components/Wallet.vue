@@ -20,13 +20,24 @@
       :child="child"
     >
     </HatchedDialog>
-    <div v-if="walletEmpty && !isLoading">
-      No Cryptomon in your wallet
-    </div>
+    <v-container v-if="walletEmpty && !isLoading" fluid fill-height>
+      <v-layout flex align-center justify-center>
+        <v-alert type="info">
+          No Cryptomon in your wallet yet. Go to the marketplace to buy some.
+        </v-alert>
+      </v-layout>
+    </v-container>
 
     <v-container v-else fluid>
       <v-row>
-        <v-col v-for="token in walletSorted" :key="token.tokenId" :cols="3">
+        <v-col
+          v-for="token in wallet"
+          :key="token.tokenId"
+          :xl="3"
+          :lg="4"
+          :md="4"
+          :sm="12"
+        >
           <v-card
             shaped
             :raised="breedSelectedToken.includes(token.tokenId)"
@@ -38,7 +49,16 @@
           >
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
-                <v-card-title class="headline">{{ token.name }} </v-card-title>
+                <v-card-title class="headline"
+                  ><v-progress-circular
+                    v-if="loadingTokenIds.includes(token.tokenId)"
+                    indeterminate
+                    color="deep-purple"
+                    size="28"
+                    class="mr-2"
+                  ></v-progress-circular
+                  >{{ token.name }}
+                </v-card-title>
 
                 <v-card-subtitle>
                   Pokemon n°{{ token.pokedex_number }} - NFT
@@ -57,17 +77,17 @@
                 </v-list-item>
               </div>
 
-              <v-avatar class="ma-3" size="175" tile>
+              <v-avatar class="mr-5 mt-5 mb-2" :size="avatarSize" tile>
                 <v-img :src="token.image_url"></v-img>
               </v-avatar>
             </div>
 
             <v-card-actions>
               <v-btn
-                v-if="!token.isListed"
+                v-if="!listedTokenIds.includes(token.tokenId)"
                 @click="sell(token.tokenId)"
                 color="rgba(100,115,201)"
-                :disabled="isLoading"
+                :disabled="loadingTokenIds.includes(token.tokenId) || isLoading"
                 text
                 ><div>Sell</div>
               </v-btn>
@@ -75,7 +95,7 @@
                 v-else
                 @click="unlistToken(token.tokenId)"
                 color="rgba(100,115,201)"
-                :disabled="isLoading"
+                :disabled="loadingTokenIds.includes(token.tokenId) || isLoading"
                 text
                 ><div>Reclaim</div>
               </v-btn>
@@ -83,7 +103,11 @@
                 @click="transfer(token.tokenId)"
                 color="rgba(100,115,201)"
                 text
-                :disabled="token.isListed || isLoading"
+                :disabled="
+                  loadingTokenIds.includes(token.tokenId) ||
+                    listedTokenIds.includes(token.tokenId) ||
+                    isLoading
+                "
                 >Transfer</v-btn
               >
               <v-btn
@@ -91,7 +115,11 @@
                 @click="hatch()"
                 color="rgba(100,115,201)"
                 text
-                :disabled="token.isListed || isLoading"
+                :disabled="
+                  loadingTokenIds.includes(token.tokenId) ||
+                    listedTokenIds.includes(token.tokenId) ||
+                    isLoading
+                "
                 >Hatch</v-btn
               >
               <div v-else>
@@ -100,7 +128,12 @@
                   @click="breedSelect(token.tokenId)"
                   color="rgba(100,115,201)"
                   text
-                  :disabled="token.isListed || isLoading || isBreedingAlready"
+                  :disabled="
+                    loadingTokenIds.includes(token.tokenId) ||
+                      listedTokenIds.includes(token.tokenId) ||
+                      isLoading ||
+                      isBreedingAlready
+                  "
                   >Select</v-btn
                 >
 
@@ -109,14 +142,18 @@
                   @click="breedUnselect(token.tokenId)"
                   color="rgba(100,115,201)"
                   text
-                  :disabled="token.isListed || isLoading"
+                  :disabled="
+                    loadingTokenIds.includes(token.tokenId) ||
+                      listedTokenIds.includes(token.tokenId) ||
+                      isLoading
+                  "
                   >Unselect</v-btn
                 >
               </div>
 
               <v-spacer></v-spacer>
               <v-chip
-                v-if="token.isListed"
+                v-if="listedTokenIds.includes(token.tokenId)"
                 class="ma-2"
                 small
                 color="green"
@@ -197,13 +234,30 @@ export default {
     sheet: false
   }),
   computed: {
+    avatarSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return "120px";
+        case "sm":
+          return "150px";
+        case "md":
+          return "120px";
+        case "lg":
+          return "130px";
+        case "xl":
+          return "165px";
+        default:
+          return "100px";
+      }
+    },
     wallet() {
       return this.$store.getters["wallet/getWallet"];
     },
-    walletSorted() {
-      const sorted = this.wallet;
-      sorted.sort((a, b) => a.pokedex_number - b.pokedex_number);
-      return sorted;
+    listedTokenIds() {
+      return this.$store.getters["wallet/getListedTokenIds"];
+    },
+    loadingTokenIds() {
+      return this.$store.getters["wallet/getLoadingTokenIds"];
     },
     walletEmpty() {
       return this.wallet.length === 0;

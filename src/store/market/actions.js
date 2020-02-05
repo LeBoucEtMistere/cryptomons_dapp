@@ -85,13 +85,6 @@ export default {
       if (error) {
         console.log(error);
       }
-      const web3 = rootState.w3.instance();
-      if (
-        _event.returnValues._by ==
-        web3.utils.toChecksumAddress(rootState.w3.address)
-      ) {
-        dispatch("wallet/getWallet", {}, { root: true });
-      }
       dispatch("fetchMarketData");
     });
 
@@ -101,13 +94,6 @@ export default {
     ) {
       if (error) {
         console.log(error);
-      }
-      const web3 = rootState.w3.instance();
-      if (
-        _event.returnValues._by ==
-        web3.utils.toChecksumAddress(rootState.w3.address)
-      ) {
-        dispatch("wallet/getWallet", {}, { root: true });
       }
       dispatch("fetchMarketData");
     });
@@ -120,13 +106,6 @@ export default {
         console.log(error);
       }
       console.log(_event);
-      const web3 = rootState.w3.instance();
-      if (
-        _event.returnValues._by ==
-        web3.utils.toChecksumAddress(rootState.w3.address)
-      ) {
-        dispatch("wallet/getWallet", {}, { root: true });
-      }
       dispatch("fetchMarketData");
     });
   }

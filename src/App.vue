@@ -32,12 +32,12 @@
 
     <v-content>
       <v-dialog v-model="isLoading" overlay persistent width="350">
-        <v-card color="deep-purple" dark>
+        <v-card dark>
           <v-card-text>
-            Please wait for validation of the transaction...
+            Fetching information from the blockchain...
             <v-progress-linear
               indeterminate
-              color="white"
+              color="deep-purple"
               class="mb-0"
             ></v-progress-linear>
           </v-card-text>

@@ -1,21 +1,31 @@
 /* eslint-disable no-console */
 export default {
-  setCMBalance(state, payload) {
-    state.balance = parseInt(payload, 10);
+  clearWallet(state) {
+    state.wallet = [];
   },
-  setTokenIds(state, payload) {
-    state.tokenIds = payload;
+  addToken(state, payload) {
+    state.wallet.push(payload);
   },
-  setWallet(state, payload) {
-    console.log("setting wallet");
-    state.wallet = payload;
+  addTokenId(state, payload) {
+    state.tokenIds.add(payload);
   },
-  markListed(state, payload) {
-    if (state.wallet.length > 0) {
-      const tab = state.wallet.filter(token => token.tokenId == payload);
-      if (tab.length == 1) {
-        tab[0].isListed = true;
-      }
-    }
+  clearTokenIds(state) {
+    state.tokenIds.clear();
+  },
+  markTokenAsListed(state, payload) {
+    state.listedTokenIds.push(payload);
+  },
+  clearListedTokenIds(state) {
+    state.listedTokenIds = [];
+  },
+  setTokenLoading(state, payload) {
+    state.loadingTokenIds.push(payload);
+  },
+  unsetTokenLoading(state, payload) {
+    var index = state.loadingTokenIds.indexOf(payload);
+    if (index !== -1) state.loadingTokenIds.splice(index, 1);
+  },
+  clearLoadingTokenIds(state) {
+    state.loadingTokenIds = [];
   }
 };
