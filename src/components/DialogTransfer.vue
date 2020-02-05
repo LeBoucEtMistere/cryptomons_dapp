@@ -13,7 +13,7 @@
             v-model="address"
             :rules="addressRules"
             label="Address"
-            color="blue"
+            color="secondary"
             required
           ></v-text-field>
         </v-form>
@@ -22,11 +22,16 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn color="blue" text @click="cancel">
+        <v-btn color="secondary" text @click="cancel">
           Cancel
         </v-btn>
 
-        <v-btn :disabled="!addressValid" color="blue" text @click="validate">
+        <v-btn
+          :disabled="!addressValid"
+          color="secondary"
+          text
+          @click="validate"
+        >
           Transfer
         </v-btn>
       </v-card-actions>

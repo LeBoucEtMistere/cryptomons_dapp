@@ -36,7 +36,7 @@
                   ><v-progress-circular
                     v-if="loadingTokenIds.includes(token.tokenId)"
                     indeterminate
-                    color="blue"
+                    color="secondary"
                     size="28"
                     class="mr-2"
                   ></v-progress-circular
@@ -83,7 +83,7 @@
             <v-card-actions>
               <v-btn
                 @click="buy(token.tokenId)"
-                color="blue"
+                color="secondary"
                 text
                 :disabled="
                   loadingTokenIds.includes(token.tokenId) ||

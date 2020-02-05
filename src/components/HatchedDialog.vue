@@ -1,7 +1,7 @@
 <template>
   <v-dialog value="true" width="50vw" @click:outside="$emit('close')">
     <v-card>
-      <v-card-title color="blue" class="justify-center"
+      <v-card-title color="secondary" class="justify-center"
         >🎉 You cryptomon egg hatched ! 🎉</v-card-title
       >
       <v-container>
@@ -33,7 +33,7 @@
       </v-container>
       <v-card-actions>
         <v-spacer />
-        <v-btn x-large color="blue" text @click="$emit('close')">
+        <v-btn x-large color="secondary" text @click="$emit('close')">
           Nice !
         </v-btn>
         <v-spacer />

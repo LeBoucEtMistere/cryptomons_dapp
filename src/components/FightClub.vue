@@ -7,7 +7,7 @@
           <v-list-item-group
             v-model="attackerIndex"
             value="tokenId"
-            color="blue lighten-1"
+            color="primary"
           >
             <v-list-item
               two-lines
@@ -35,24 +35,32 @@
               </v-chip>
               <v-list-item-icon
                 ><v-icon
-                  color="blue"
+                  color="secondary"
                   :small="attacker !== token.tokenId"
                   :disabled="attacker !== token.tokenId"
-                  >mdi-sword-cross</v-icon
+                  >mdi-sword</v-icon
                 >
               </v-list-item-icon>
             </v-list-item>
           </v-list-item-group>
         </v-list></v-col
       >
-      <v-col cols="2"> => </v-col>
+      <v-col cols="2">
+        <v-container fluid>
+          <v-layout flex align-center justify-center>
+            <v-icon color="secondary" :disabled="!sheet" large class="mt-5"
+              >mdi-sword-cross</v-icon
+            >
+          </v-layout>
+        </v-container>
+      </v-col>
       <v-col cols="5"
         ><v-list subheader>
           <v-subheader>And fight other trainer's Cryptomons</v-subheader>
           <v-list-item-group
             v-model="defenderIndex"
             value="tokenId"
-            color="blue lighten-1"
+            color="primary"
           >
             <v-list-item
               two-lines
@@ -83,10 +91,10 @@
               </v-chip>
               <v-list-item-icon
                 ><v-icon
-                  color="blue"
+                  color="secondary"
                   :small="defender !== token.tokenId"
                   :disabled="defender !== token.tokenId"
-                  >mdi-sword-cross</v-icon
+                  >mdi-shield</v-icon
                 >
               </v-list-item-icon>
             </v-list-item>
@@ -106,7 +114,7 @@
               class="ma-6"
               text
               outlined
-              color="blue"
+              color="secondary"
               @click="fight(attacker, defender)"
               >Fight!</v-btn
             >
@@ -120,7 +128,7 @@
     <div class="text-center">
       <v-snackbar v-model="snackbar" :timeout="timeout">
         {{ text }}
-        <v-btn color="blue" text @click="snackbar = false">
+        <v-btn color="secondary" text @click="snackbar = false">
           Close
         </v-btn>
       </v-snackbar>

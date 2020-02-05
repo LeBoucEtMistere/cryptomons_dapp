@@ -2,21 +2,19 @@
   <v-app id="inspire">
     <v-app-bar
       app
-      color="blue lighten-1"
+      color="primary"
       dark
       shrink-on-scroll
       prominent
       fade-img-on-scroll
-      src="http://images.nintendolife.com/505ca16081ae5/best-pokemon-games.original.jpg"
+      src="@/assets/banner.png"
     >
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(52,118,204, .7), rgba(52,118,204, .3)"
+          gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,0.3)"
         ></v-img>
       </template>
-
-      <v-toolbar-title>Cryptomons</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -37,21 +35,16 @@
             Fetching information from the blockchain...
             <v-progress-linear
               indeterminate
-              color="blue"
+              color="secondary"
               class="mb-0"
             ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
-      <!-- <v-progress-linear
-        v-if="isLoading"
-        indeterminate
-        color="rgba(100,115,201)"
-      ></v-progress-linear> -->
       <router-view />
     </v-content>
 
-    <v-footer color="blue lighten-1" app>
+    <v-footer color="primary" app>
       <span class="white--text">&copy; 2020 Arthur Depasse</span>
       <v-spacer></v-spacer>
       <span class="white--text"
