@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-app-bar
       app
-      color="#6A76AB"
+      color="blue lighten-1"
       dark
       shrink-on-scroll
       prominent
@@ -12,7 +12,7 @@
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
+          gradient="to top right, rgba(52,118,204, .7), rgba(52,118,204, .3)"
         ></v-img>
       </template>
 
@@ -32,12 +32,12 @@
 
     <v-content>
       <v-dialog v-model="isLoading" overlay persistent width="350">
-        <v-card dark>
+        <v-card>
           <v-card-text>
             Fetching information from the blockchain...
             <v-progress-linear
               indeterminate
-              color="deep-purple"
+              color="blue"
               class="mb-0"
             ></v-progress-linear>
           </v-card-text>
@@ -51,7 +51,7 @@
       <router-view />
     </v-content>
 
-    <v-footer color="rgba(100,115,201)" app>
+    <v-footer color="blue lighten-1" app>
       <span class="white--text">&copy; 2020 Arthur Depasse</span>
       <v-spacer></v-spacer>
       <span class="white--text"

@@ -1,12 +1,8 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 import axios from "axios";
-import fight from ".";
 
 export default {
   async getTokens({ rootState, commit, dispatch }) {
     //commit("setLoading", true, { root: true });
-    console.log("getTokens Action being executed");
     const CMC = rootState.CMContract;
 
     const balance = await CMC.methods
@@ -107,6 +103,5 @@ export default {
       .send(options);
     commit("setLastFight", result.events.Fighted.returnValues.win);
     commit("setFighted", true);
-    console.log(result);
   }
 };

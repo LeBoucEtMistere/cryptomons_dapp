@@ -19,7 +19,7 @@
             v-model="price"
             :rules="priceRules"
             label="Price"
-            color="rgba(100,115,201)"
+            color="blue"
             type="number"
             required
           ></v-text-field>
@@ -29,16 +29,11 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn color="rgba(100,115,201)" text @click="cancel">
+        <v-btn color="blue" text @click="cancel">
           Cancel
         </v-btn>
 
-        <v-btn
-          :disabled="!priceValid"
-          color="rgba(100,115,201)"
-          text
-          @click="validate"
-        >
+        <v-btn :disabled="!priceValid" color="blue" text @click="validate">
           Sell
         </v-btn>
       </v-card-actions>

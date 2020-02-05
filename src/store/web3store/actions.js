@@ -8,7 +8,6 @@ export default {
   },
   connectToWeb3: ({ commit }) =>
     new Promise((resolve, reject) => {
-      console.log("Action connect to Web3");
       if (window.ethereum) {
         window.ethereum
           .enable()
@@ -79,11 +78,11 @@ export default {
       try {
         const address = await dispatch("getCoinbase");
         if (address !== state.address) {
-          console.log("address changed");
           dispatch("setLoading", true, { root: true });
           await dispatch("setAddress", address);
           await dispatch("checkAdmin", {}, { root: true });
           await dispatch("wallet/initWallet", {}, { root: true });
+          dispatch("market/initMarket", {}, { root: true });
           dispatch("setLoading", false, { root: true });
         }
       } catch (err) {

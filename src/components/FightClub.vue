@@ -7,7 +7,7 @@
           <v-list-item-group
             v-model="attackerIndex"
             value="tokenId"
-            color="rgba(100, 115, 201)"
+            color="blue lighten-1"
           >
             <v-list-item
               two-lines
@@ -35,7 +35,7 @@
               </v-chip>
               <v-list-item-icon
                 ><v-icon
-                  color="deep-purple"
+                  color="blue"
                   :small="attacker !== token.tokenId"
                   :disabled="attacker !== token.tokenId"
                   >mdi-sword-cross</v-icon
@@ -52,7 +52,7 @@
           <v-list-item-group
             v-model="defenderIndex"
             value="tokenId"
-            color="rgba(100, 115, 201)"
+            color="blue lighten-1"
           >
             <v-list-item
               two-lines
@@ -83,7 +83,7 @@
               </v-chip>
               <v-list-item-icon
                 ><v-icon
-                  color="deep-purple"
+                  color="blue"
                   :small="defender !== token.tokenId"
                   :disabled="defender !== token.tokenId"
                   >mdi-sword-cross</v-icon
@@ -106,7 +106,7 @@
               class="ma-6"
               text
               outlined
-              color="rgba(100,115,201)"
+              color="blue"
               @click="fight(attacker, defender)"
               >Fight!</v-btn
             >
@@ -135,12 +135,9 @@ export default {
     defenderIndex: undefined,
     snackbar: false,
     text: "",
-    timeout: 2000
+    timeout: 4000
   }),
   computed: {
-    isOwner() {
-      return this.$store.getters.isAdmin;
-    },
     tokens() {
       return this.$store.getters["fight/getTokens"];
     },
@@ -175,8 +172,6 @@ export default {
     },
     breedingTokens() {
       const a = this.$store.getters["fight/getBreedingTokens"];
-      // eslint-disable-next-line no-console
-      console.log(a);
       if (a) {
         return this.tokens.filter(token => a.includes(token.tokenId));
       } else {

@@ -49,7 +49,7 @@ store.dispatch("w3/initWeb3").then(() =>
     .then(() => store.dispatch("wallet/initWallet"))
     .then(() => {
       store.commit("setLoading", false);
-      store.dispatch("market/fetchMarketData");
+      store.dispatch("market/initMarket");
       store.dispatch("fight/getTokens");
       store.dispatch("breed/getBreedingTokens").then(() => {
         if (store.getters["breed/getBreedingTokens"].length > 0) {

@@ -5,11 +5,18 @@ import axios from "axios";
 export default {
   async initWallet({ dispatch, commit }) {
     commit("clearTokenIds");
+    commit("clearDiffs");
     commit("clearListedTokenIds");
     commit("clearLoadingTokenIds");
-    commit("clearWallet");
-    await dispatch("syncTokenIds");
-    await dispatch("syncTokensMetadata");
+    commit("clearTokens");
+    await dispatch("syncTokenIdsDiff");
+    await dispatch("syncTokens");
+    await dispatch("syncListedTokens");
+  },
+  async refreshWallet({ dispatch, commit }) {
+    commit("clearDiffs");
+    await dispatch("syncTokenIdsDiff");
+    await dispatch("syncTokens");
     await dispatch("syncListedTokens");
   },
   async transferToken({ dispatch, rootState, commit }, payload) {
@@ -65,28 +72,57 @@ export default {
       commit("unsetTokenLoading", payload.tokenId);
     }
   },
-  async syncTokenIds({ rootState, commit }) {
-    const CMC = rootState.CMContract;
-    const balance = await CMC.methods
+
+  async syncListedTokens({ rootState, commit, state }) {
+    const listedTokens = (
+      await rootState.MKContract.methods
+        .getListedTokens()
+        .call({ from: rootState.w3.address })
+    ).map(tokenId => parseInt(tokenId, 10));
+    const toAdd = new Set([...listedTokens].filter(x => state.tokenIds.has(x)));
+    commit("clearListedTokenIds");
+    toAdd.forEach(tokenId => {
+      commit("markTokenAsListed", tokenId);
+    });
+  },
+
+  async syncTokenIdsDiff({ rootState, commit, state }) {
+    const balance = await rootState.CMContract.methods
       .balanceOf(rootState.w3.address)
       .call({ from: rootState.w3.address });
 
-    commit("clearTokenIds");
+    const tokenIds = new Set();
 
     for (var i = 0; i < balance; i++) {
-      const id = await CMC.methods
+      const id = await rootState.CMContract.methods
         .tokenOfOwnerByIndex(rootState.w3.address, i)
         .call({ from: rootState.w3.address });
-      commit("addTokenId", parseInt(id, 10));
+      tokenIds.add(parseInt(id, 10));
     }
+
+    const toRemove = new Set([...state.tokenIds].filter(x => !tokenIds.has(x)));
+
+    commit("setDiffRemove", toRemove);
+
+    const toAdd = new Set([...tokenIds].filter(x => !state.tokenIds.has(x)));
+
+    commit("setDiffAdd", toAdd);
   },
-  async syncTokensMetadata({ dispatch, state }) {
-    for (const tokenId of state.tokenIds) {
-      dispatch("syncTokenMetadata", tokenId);
+  async syncTokens({ dispatch, state, commit }) {
+    for (let tokenId of state.tokenIdsToRemove) {
+      commit("removeToken", tokenId);
+      commit("removeTokenId", tokenId);
     }
+
+    for (let tokenId of state.tokenIdsToAdd) {
+      dispatch("loadToken", tokenId);
+      commit("addTokenId", tokenId);
+    }
+
+    commit("clearDiffs");
   },
 
-  async syncTokenMetadata({ rootState, commit }, tokenId) {
+  async loadToken({ rootState, commit }, tokenId) {
     // fetch metadata URI
     const uri = await rootState.CMContract.methods
       .tokenURI(tokenId)
@@ -107,17 +143,5 @@ export default {
     };
 
     commit("addToken", obj);
-  },
-  async syncListedTokens({ rootState, commit, state }) {
-    const listedTokens = (
-      await rootState.MKContract.methods
-        .getListedTokens()
-        .call({ from: rootState.w3.address })
-    ).map(tokenId => parseInt(tokenId, 10));
-    const toAdd = new Set([...listedTokens].filter(x => state.tokenIds.has(x)));
-    commit("clearListedTokenIds");
-    toAdd.forEach(tokenId => {
-      commit("markTokenAsListed", tokenId);
-    });
   }
 };

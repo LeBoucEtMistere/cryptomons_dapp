@@ -43,7 +43,7 @@
             :raised="breedSelectedToken.includes(token.tokenId)"
             :color="
               breedSelectedToken.includes(token.tokenId)
-                ? 'rgba(100, 115, 201, 0.1)'
+                ? 'rgba(66, 165, 245, 0.15)'
                 : 'white'
             "
           >
@@ -53,7 +53,7 @@
                   ><v-progress-circular
                     v-if="loadingTokenIds.includes(token.tokenId)"
                     indeterminate
-                    color="deep-purple"
+                    color="blue"
                     size="28"
                     class="mr-2"
                   ></v-progress-circular
@@ -86,7 +86,7 @@
               <v-btn
                 v-if="!listedTokenIds.includes(token.tokenId)"
                 @click="sell(token.tokenId)"
-                color="rgba(100,115,201)"
+                color="blue"
                 :disabled="loadingTokenIds.includes(token.tokenId) || isLoading"
                 text
                 ><div>Sell</div>
@@ -94,14 +94,14 @@
               <v-btn
                 v-else
                 @click="unlistToken(token.tokenId)"
-                color="rgba(100,115,201)"
+                color="blue"
                 :disabled="loadingTokenIds.includes(token.tokenId) || isLoading"
                 text
                 ><div>Reclaim</div>
               </v-btn>
               <v-btn
                 @click="transfer(token.tokenId)"
-                color="rgba(100,115,201)"
+                color="blue"
                 text
                 :disabled="
                   loadingTokenIds.includes(token.tokenId) ||
@@ -113,7 +113,7 @@
               <v-btn
                 v-if="hatchableTokens.includes(token)"
                 @click="hatch()"
-                color="rgba(100,115,201)"
+                color="blue"
                 text
                 :disabled="
                   loadingTokenIds.includes(token.tokenId) ||
@@ -126,7 +126,7 @@
                 <v-btn
                   v-if="!breedSelectedToken.includes(token.tokenId)"
                   @click="breedSelect(token.tokenId)"
-                  color="rgba(100,115,201)"
+                  color="blue"
                   text
                   :disabled="
                     loadingTokenIds.includes(token.tokenId) ||
@@ -140,7 +140,7 @@
                 <v-btn
                   v-else
                   @click="breedUnselect(token.tokenId)"
-                  color="rgba(100,115,201)"
+                  color="blue"
                   text
                   :disabled="
                     loadingTokenIds.includes(token.tokenId) ||
@@ -199,7 +199,7 @@
               class="ma-6"
               text
               outlined
-              color="rgba(100,115,201)"
+              color="blue"
               @click="doBreed()"
               >Breed</v-btn
             >
@@ -294,8 +294,6 @@ export default {
     },
     child() {
       const id = this.$store.getters["breed/getChild"];
-      console.log("childi d", id);
-      console.log(this.wallet.filter(token => token.tokenId === id));
       return this.wallet.filter(token => token.tokenId === id)[0];
     },
     hatchDialog() {

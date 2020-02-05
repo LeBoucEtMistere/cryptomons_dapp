@@ -1,16 +1,47 @@
 <template>
   <v-container>
-    <div v-if="marketEmpty">No Cryptomon listed in the market</div>
+    <v-alert v-if="newContentAvailable" type="info" dense prominent>
+      <v-row align="center">
+        <v-col class="grow"
+          >New content available in the market, please refresh to see it.</v-col
+        >
+        <v-col class="shrink">
+          <v-btn color="white" text @click="refreshMarket">Refresh</v-btn>
+        </v-col>
+      </v-row>
+    </v-alert>
+
+    <v-container v-if="marketEmpty" fluid fill-height>
+      <v-layout flex align-center justify-center>
+        <v-alert type="info">
+          No Cryptomon listed on the market yet. Come back later.
+        </v-alert>
+      </v-layout>
+    </v-container>
+
     <v-container v-else fluid>
       <v-row>
-        <v-col v-for="token in marketSorted" :key="token.tokenId" :cols="3">
+        <v-col
+          v-for="token in market"
+          :key="token.tokenId"
+          :xl="3"
+          :lg="4"
+          :md="4"
+          :sm="12"
+        >
           <v-card shaped>
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
-                <v-card-title
-                  class="headline"
-                  v-text="token.name"
-                ></v-card-title>
+                <v-card-title class="headline"
+                  ><v-progress-circular
+                    v-if="loadingTokenIds.includes(token.tokenId)"
+                    indeterminate
+                    color="blue"
+                    size="28"
+                    class="mr-2"
+                  ></v-progress-circular
+                  >{{ token.name }}</v-card-title
+                >
 
                 <v-card-subtitle>
                   Pokemon n°{{ token.pokedex_number }} - NFT
@@ -44,7 +75,7 @@
                 </v-list-item>
               </div>
 
-              <v-avatar class="ma-3" size="175" tile>
+              <v-avatar class="mr-5 mt-5 mb-2" :size="avatarSize" tile>
                 <v-img :src="token.image_url"></v-img>
               </v-avatar>
             </div>
@@ -52,9 +83,12 @@
             <v-card-actions>
               <v-btn
                 @click="buy(token.tokenId)"
-                color="rgba(100,115,201)"
+                color="blue"
                 text
-                :disabled="$store.getters['isLoading']"
+                :disabled="
+                  loadingTokenIds.includes(token.tokenId) ||
+                    $store.getters['isLoading']
+                "
                 ><div>Buy</div>
               </v-btn>
               <v-spacer></v-spacer>
@@ -76,24 +110,44 @@ export default {
     selectedToken: null
   }),
   computed: {
+    avatarSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return "120px";
+        case "sm":
+          return "150px";
+        case "md":
+          return "120px";
+        case "lg":
+          return "130px";
+        case "xl":
+          return "165px";
+        default:
+          return "100px";
+      }
+    },
+    newContentAvailable() {
+      return this.$store.getters["market/newContentAvailable"];
+    },
     balance() {
       return this.$store.getters["w3/balance"];
     },
     market() {
       return this.$store.getters["market/getListedTokens"];
     },
-    marketSorted() {
-      const sorted = this.market;
-      sorted.sort((a, b) => a.pokedex_number - b.pokedex_number);
-      return sorted;
-    },
     marketEmpty() {
       return this.market.length === 0;
+    },
+    loadingTokenIds() {
+      return this.$store.getters["market/getLoadingTokenIds"];
     }
   },
   methods: {
     buy(tokenId) {
       this.$store.dispatch("market/buyToken", tokenId);
+    },
+    refreshMarket() {
+      this.$store.dispatch("market/refreshMarket");
     }
   }
 };
