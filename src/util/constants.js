@@ -11,8 +11,8 @@ export const constants = {
   addresses: {
     CryptomonContract:
       process.env.CRYPTOMON_ADDRESS ||
-      "0x7b9d24F4e106ed56879bb8B72E995F09Ad0BA38B",
+      "0xC5986E7BDEbc2B1007cd713ba8d3526a21247684",
     MarketContract:
-      process.env.MARKET_ADDRESS || "0x3683C7a0F27080d7697ed9011D266f9ae4eBc20C"
+      process.env.MARKET_ADDRESS || "0x7aD154D3291f2A3620597e9e628F7A60c18bD6b4"
   }
 };

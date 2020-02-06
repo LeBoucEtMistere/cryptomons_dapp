@@ -46,7 +46,7 @@ export default {
       if (error) {
         console.log(error);
       }
-      console.log(_event);
+      //console.log(_event);
       commit("setNewContentAvailable");
     });
   },

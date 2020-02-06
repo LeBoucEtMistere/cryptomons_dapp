@@ -65,6 +65,10 @@ export default {
         from: rootState.w3.address,
         gasLimit: 1000000
       });
+      // unapprove market on token
+      await rootState.CMContract.methods
+        .approve("0x0000000000000000000000000000000000000000", payload.tokenId)
+        .send({ from: rootState.w3.address });
       dispatch("syncListedTokens");
     } catch (error) {
       if (error.code !== 4001) console.log(error);

@@ -24,9 +24,15 @@ export default {
     }
   },
   mintToken({ state }, payload) {
-    state.CMContract.methods.createCryptomon(payload.to, payload.uri).send({
-      from: "0xcC7A633479E791A1B24Eb0329caaf3872cDdF8B6"
-    });
+    state.CMContract.methods
+      .createCryptomon(
+        payload.to,
+        payload.uri,
+        state.w3.instance().utils.toWei(payload.price.toString(), "ether")
+      )
+      .send({
+        from: state.w3.address
+      });
   },
   setLoading({ commit }, payload) {
     commit("setLoading", payload);

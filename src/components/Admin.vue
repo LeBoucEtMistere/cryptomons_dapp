@@ -18,6 +18,13 @@
         required
       ></v-text-field>
 
+      <v-text-field
+        v-model="price"
+        label="Price (only used if minting to market)"
+        type="number"
+        required
+      ></v-text-field>
+
       <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
         Validate
       </v-btn>
@@ -38,14 +45,7 @@ export default {
   data: () => ({
     valid: true,
     address: "",
-    addressRules() {
-      return [
-        v => !!v || "Address is required",
-        v =>
-          (v && this.$store.state.w3.instance().utils.isAddress(v)) ||
-          "You must input a valid ETH address"
-      ];
-    },
+    price: "",
     cmNumber: "",
     cmNumberRules: [
       v => !!v || "Cryptomon pokedex number is required",
@@ -60,7 +60,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.dispatch("mintToken", {
           to: this.address,
-          uri: `https://morning-springs-53559.herokuapp.com/cryptomon/meta/${this.cmNumber}`
+          uri: `https://morning-springs-53559.herokuapp.com/cryptomon/meta/${this.cmNumber}`,
+          price: this.price || 0.01
         });
       }
     },
@@ -72,6 +73,14 @@ export default {
     }
   },
   computed: {
+    addressRules() {
+      return [
+        v => !!v || "Address is required",
+        v =>
+          (v && this.$store.state.w3.instance().utils.isAddress(v)) ||
+          "You must input a valid ETH address"
+      ];
+    },
     isOwner() {
       return this.$store.getters.isAdmin;
     }
