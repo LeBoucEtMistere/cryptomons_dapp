@@ -27,7 +27,7 @@ export default {
         await rootState.CMContract.methods
           .safeTransferFrom(rootState.w3.address, payload.to, payload.tokenId)
           .send({ from: rootState.w3.address });
-        dispatch("syncListedTokens");
+        dispatch("refreshWallet");
       } catch (error) {
         if (error.code !== 4001) console.log(error);
       } finally {
