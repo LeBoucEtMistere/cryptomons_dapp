@@ -82,6 +82,7 @@ export default {
           await dispatch("setAddress", address);
           await dispatch("checkAdmin", {}, { root: true });
           await dispatch("wallet/initWallet", {}, { root: true });
+          dispatch("fight/getTokens", {}, { root: true });
           dispatch("market/initMarket", {}, { root: true });
           dispatch("setLoading", false, { root: true });
         }
